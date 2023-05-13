@@ -3,14 +3,56 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Component} 
 
 export default function App() {
 
-	const[peso, setPeso] = useState(0);
-	const[altura, setAltura] = useState(0);
-	const[resultado, setResultado] = useState(0);
+	const[peso, setPeso] = useState();
+	const[altura, setAltura] = useState();
+	const[resultado, setResultado] = useState();
+	const[nivel, setNivel] = useState();
 
 	
 	function imc(){
-		let r = parseFloat(peso) / parseFloat(altura);
-		setResultado(r);
+		let r = peso / (altura * altura);
+		setResultado(r.toFixed(2));
+		
+		if (r <= 16.9){
+			let n = ("Muito abaixo do peso!");
+			setNivel(n);		
+		}
+		
+		else if (r >= 17 && r <= 18.4){
+			let n = ("Abaixo do peso!");
+			setNivel(n);
+		}
+		
+		else if (r >= 18.5 && r <= 24.9){
+			let n = ("Peso normal!");
+			setNivel(n);
+		}
+		
+		else if (r >= 25 && r <= 29.9){
+			let n = ("Acima do peso!");
+			setNivel(n);
+		}
+		
+		else if (r >= 30 && r <= 34.9){
+			let n = ("Obesidade grau I!");
+			setNivel(n);
+		}
+		
+		else if (r >= 35 && r <= 40){
+			let n = ("Obesidade grau II!");
+			setNivel(n);
+		}
+		
+		else if (r >= 40){
+			let n = ("Obesidade grau III!");
+			setNivel(n);
+		}
+	}
+	
+	function limpar(){
+		setResultado("");
+		setAltura("");
+		setPeso("");
 	}
 
   return (
@@ -28,18 +70,24 @@ export default function App() {
 		  
 		  
 		  <View style={styles.bloco}>
-				<Text style={styles.label}>Peso: </Text>
+				<Text style={styles.label}>Peso (KG): </Text>
 			  	<TextInput
+					maxLength={6}
 					style={styles.input}
 					value={peso}
 					onChangeText={(valor)=>setPeso(valor)}
+					placeholder="Exemplo 64.350"
+					placeholderTextColor="#b1aeae"
 				/>
 			  
-		  		<Text style={styles.label}>Altura: </Text>
+		  		<Text style={styles.label}>Altura (Metro): </Text>
 			  	<TextInput
+					maxLength={6}
 					style={styles.input}
 					value={altura}
 					onChangeText={(valor)=>setAltura(valor)}
+					placeholder="Exemplo 1.72"
+					placeholderTextColor="#b1aeae" 
 				/>
 			  
 			  <View style={styles.blocoBotao}>
@@ -47,7 +95,7 @@ export default function App() {
 					<Text style={styles.textoBotao}>Calcular</Text>
 				</TouchableOpacity>
 				  
-				<TouchableOpacity style={styles.botao}>
+				<TouchableOpacity style={styles.botao} onPress={limpar}>
 					<Text style={styles.textoBotao}>Limpar</Text>
 				</TouchableOpacity>
 			  </View>
@@ -55,6 +103,11 @@ export default function App() {
 			<View style={styles.label1}>
 				<Text style={styles.label1}> Resultado: {resultado} </Text>
 			</View>
+			
+			<View style={styles.label1}>
+				<Text style={styles.label1}> Classificação: {nivel} </Text>
+			</View>
+			
 		  </View>
       
     </View>
